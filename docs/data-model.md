@@ -1,70 +1,66 @@
-# System Architecture Framework
+# Data Model
 
-## High-Level Components
+This model represents a generic CRM-style tracking system for leads, applicants, communications, automation status, and reporting.
 
-ATSA is composed of:
+## Core Entities
 
-1. **Power Apps (Web Application UI)**
-   - Landing dashboard with module navigation
-   - Individual Screens - Leads / Applicants / Program Cohort / Reports
-   - Profile screens with tab-based layouts
-   - Communication screens (log, view, email, automated status)
+### Person
+Represents an individual (prospect/applicant/student) in a PII(Personal Identification Information)-safe structure.
 
-2. **Data Layer**
-   - **SQL Server** for structured relational data (reporting-friendly, scalable)
-   - **SharePoint Lists** for rapid internal data upload as a medium
-   - This public repo uses a **generic SQL schema** to illustrate the model
+### Lead
+Represents a prospect record created by staff or imported from campaigns.
 
-3. **Automation Layer (Power Automate)**
-   - Email sending + logging
-   - Batch email campaigns
-   - Import/dedup processes
-   - Lead aging rules (cold-lead status updates)
-   - Status/notification workflows
+### Applicant
+Represents an application record (often sourced from a central registration system).
 
-4. **Analytics Layer (Power BI)**
-   - Reports list UI
-   - Parameterized report filters
-   - Visual analytics dashboards for quick metrics
+### Program / Cohort
+Represents a program, session, intake, or special cohort grouping.
 
-## Data Flow (Conceptual)
+### Communication
+Represents a single interaction: email, phone call, meeting, etc.
+Used to power chronological history timelines.
 
-### Lead Lifecycle
-1. Staff creates or imports a **Lead**
-2. Staff records communications (manual entries, walk-ins, phone calls or emails)
-3. Automated outreach updates statuses and logs interactions
-4. Lead may convert into an **Applicant** (or remain a lead)
+### AutomatedMessagePlan / AutomatedMessageStatus
+Represents configured automation sequences and the per-person state.
 
-### Applicant Lifecycle
-1. Applicant data is imported from a **central registration source**
-2. System checks for matches against existing leads (dedup)
-3. Staff reviews and updates applicant statuses and steps
-4. Communication history is unified (including prior lead history)
+### EmailTemplate
+Represents reusable email content for batch or individual outreach.
 
-### Communications
-- Each email/interaction becomes a **Communication** record
-- Communication entries power a chronological timeline view
-- Automated messages are also recorded for auditability
+### ImportBatch
+Represents an import run and results for traceability.
 
-### Reporting & Analytics
-- Reports query the data layer (SQL)
-- Analytics visuals use aggregated datasets (Power BI)
-- Screens provide filters for staff to generate reports and visuals
+### UserRole
+Represents staff role and permissions.
 
-## Screen Modules Reflected in the Build
+## Relationship Summary
 
-The application design includes:
-- Dashboard home with navigation cards
-- Lead list → Lead profile → Communication history → Email / Automated Emails status
-- Applicant list → Import feed → Applicant profile → Communication history
-- Cohort tracking list → Cohort import feeds
-- Reports list → Report filters → Analytics visuals
+- A **Person** can have **0..n Leads**
+- A **Person** can have **0..n Applicants**
+- A **Lead** can convert into an **Applicant** (tracked via references)
+- A **Person** has **0..n Communications**
+- A **Person** can have **0..n AutomatedMessageStatus** records
+- A **Program** / **Cohort** relates to leads and applicants via foreign keys
 
-(These modules map to the mockup screens and project description.)
+## Notes on Reporting
 
-## Operational Considerations (Conceptual)
+- Reporting typically aggregates by:
+  - Program/session
+  - Status and stage
+  - Country/region (if tracked in a privacy-safe way)
+  - Date ranges (created/updated/submitted)
+  - Conversion metrics (lead → applicant)
 
-- **Auditability:** communication events logged for traceability
-- **Resilience:** flow retries and error paths for email/import processes
-- **Performance:** delegation-aware filtering patterns in Power Apps for large lists
-- **Usability:** tabbed profile views to prevent overload and reduce scrolling
+## Generic Status Design
+
+Use normalized lookup tables for statuses:
+- LeadStatus (e.g., New, Contacted, Warm, Cold)
+- ApplicantStatus (e.g., Submitted, In Review, Accepted, Denied)
+
+This enables:
+- Stable reporting
+- Clean UI dropdowns
+- Centralized status management
+
+## See also
+
+- `sample-schema.sql` for a runnable generic SQL schema.
