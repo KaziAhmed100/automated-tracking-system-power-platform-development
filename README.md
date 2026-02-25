@@ -1,10 +1,10 @@
-# ATSA (Automated Tracking System Application) — Sanitized Portfolio Case Study
+# Automated Tracking System — Sanitized Portfolio Case Study
 
 > **Note:** This public repository is a **sanitized portfolio artifact**. It intentionally excludes proprietary names, production exports, environment identifiers, and any real user/student data. It focuses on **architecture, data model patterns, automation design, and implementation approach**.
 
 ## Overview
 
-ATSA is a Power Platform-based customer relationship management (CRM) style application built to help a university language & culture program track:
+This is a Power Platform-based customer relationship management (CRM) style application built to help a university language & culture program track:
 - **Student leads**
 - **Applicants**
 - **A special cohort/program category**
@@ -34,7 +34,7 @@ A third-party CRM was evaluated but considered cost-prohibitive for the unit, so
 
 ## Solution Summary
 
-ATSA provides:
+The system provides:
 - A landing dashboard with modules for **Leads**, **Applicants**, **Program Cohort**, and **Reports**
 - List views with search, filters, and “details” actions for staff to quickly triage records
 - Profile pages segmented into tabs to keep large datasets usable
