@@ -1,7 +1,7 @@
-# Flow 01 — Lead Intake & Routing (Sanitized)
+# Flow 01 — Lead Intake & Routing
 
 ## Purpose
-Standardize how new leads enter the system, ensure required fields are captured, and route leads to the correct program/session cohort.
+Standardize how new leads enter the system (such as a central inquiry form), ensure required fields are captured, and route leads to the correct program/session cohort.
 
 ## Trigger
 - When a new Lead record is created (Power Apps submit or import)
